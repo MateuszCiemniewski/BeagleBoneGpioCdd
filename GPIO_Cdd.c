@@ -11,7 +11,14 @@
 char gpio_export(char gpio_pin)
 {
     FILE *file;
-
+    char path[50] = "";
+	strcat(path, "/sys/class/gpio/gpio");
+	char temp[5] = "";
+	IntToString(gpio_pin, temp);
+	strcat(path, temp);
+	int8_t i = 0;
+	do
+	{
     file = fopen("/sys/class/gpio/export", "w");
     char pin[4] = "";
     IntToString(gpio_pin, pin);
@@ -25,6 +32,7 @@ char gpio_export(char gpio_pin)
         fprintf(file, pin);
         fclose(file);
     }
+    } while (access(path, F_OK) || (i == 3));
     return 0;
 }
 
